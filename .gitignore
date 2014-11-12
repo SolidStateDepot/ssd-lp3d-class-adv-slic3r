@@ -1,0 +1,6 @@
+**/.DS_Store
+lets_slice/**/*.stl
+lets_slice/**/*.gcode
+lets_slice/**/*.ini
+lets_slice/**/*.ods
+lets_slice/**/*.?cad

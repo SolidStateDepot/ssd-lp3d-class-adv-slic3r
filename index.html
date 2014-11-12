@@ -1,0 +1,313 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>Advanced Slicing for 3D Printing</title>
+<!-- metadata -->
+<meta name="generator" content="S5" />
+<meta name="version" content="1.0" />
+<meta name="subject" content="Advanced STL to GCode translation" />
+<meta name="author" content="Free Beachler" />
+<meta name="company" content="Solid State Depot" />
+<meta name="publisher" content="boulderhackerspace.com" />
+<meta name="description" content="A presentation that outlines the topics covered in the workshop at Solid State Depot titled 'Advanced Slicing'." />
+<meta name="keywords" content="SSD, boulder hackerspace, 3D printer, reprap, hackerspace, gcode, STL, slicing, slic3r, Open Source Software, OSS, Open Source Hardware, OSH, S5" />
+<meta name="robots" content="index, follow" />
+<meta name="revisit-after" content="7 days" />
+<!-- meta additionally -->
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<!-- configuration parameters -->
+<meta name="defaultView" content="slideshow" />
+<meta name="controlVis" content="hidden" />
+<!-- configuration transition extension -->
+<meta name="tranSitions" content="true" />
+<meta name="fadeDuration" content="500" />
+<meta name="incrDuration" content="250" />
+<!-- configuration autoplay extension -->
+<meta name="autoMatic" content="false" />
+<meta name="playLoop" content="true" />
+<meta name="playDelay" content="10" />
+<!-- configuration audio extension -->
+<meta name="audioSupport" content="true" />
+<meta name="audioVolume" content="100" />
+<meta name="audioError" content="true" />
+<!-- configuration audio debug -->
+<meta name="audioDebug" content="false" />
+<!-- style sheet links -->
+<link rel="stylesheet" href="ui/scala_utf/slides.css" type="text/css" media="projection" id="slideProj" />
+<link rel="stylesheet" href="ui/scala_utf/outline.css" type="text/css" media="screen" id="outlineStyle" />
+<link rel="stylesheet" href="ui/scala_utf/print.css" type="text/css" media="print" id="slidePrint" />
+<link rel="stylesheet" href="ui/scala_utf/opera.css" type="text/css" media="projection" id="operaFix" />
+<!-- embedded styles -->
+<style type="text/css" media="all">
+.imgcon {width: 100%; margin: 0 auto; padding: 0; text-align: center;}
+#anim {width: 33%; height: 320px; position: relative;}
+#anim img {position: absolute; top: 0px; left: 0px;}
+.red {color: red;}
+.grey {color: gray;}
+</style>
+<!-- S5 JS -->
+<script src="ui/scala_utf/slides.js" type="text/javascript"></script>
+</head>
+<body>
+
+<div class="layout">
+	<div id="controls"><!-- DO NOT EDIT --></div>
+	<div id="currentSlide"><!-- DO NOT EDIT --></div>
+	<div id="header"></div>
+	<div id="footer">
+		<h1>Advanced Slicing for 3D Printing</h1>
+	</div>
+</div>
+
+<div class="presentation">
+
+	<object data="mp3/chillout.mp3" archive="volume:50,loop" type="audio/mp3" class="handout" declare="declare" width="0" height="0"></object>
+
+	<div class="slide">
+		<h1>Advanced Slicing for 3D Printing</h1>
+		<h3>Free Beachler</h3>
+		<h4><a href="http://boulderhackerspace.com" rel="external">boulderhackerspace.com</a></h4>
+        <p style="font-size: 18px;"><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title" style="font-size: 20px;">Advanced Slicing for 3D Printing</span> by <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">Free Beachler</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="pix/ccna_80_15.png" /></a><br />
+        Slideshow based on S<span class="red">5</span> 1.3&szlig;6 by Eric Meyers (meyerweb.com) and Christian Effenberger (s5.netzgesta.de).<br /></p>
+		<div class="handout"></div>
+		<object data="mp3/thunder.mp3" archive="volume:50" type="audio/mp3" class="handout" declare="declare" width="0" height="0"></object>
+	</div>
+	
+	<div class="slide">
+		<h1>What is Slicing?</h1>
+		<ul>
+            <li>3D Printers understand GCode motion commands.</li>
+            <li>STL file format commonly supported by GCode translators.
+            	<ul>
+                	<li>CAD software may need STL export plugin.</li>
+                </ul>
+            </li>
+        	<li>Slicing is the process of translating an STL file into GCode.</li>
+            <li>STL&nbsp;&rarr;&nbsp;GCode</li>
+		</ul>
+		<div class="notes">
+			<ul>
+            	<li>STL = Standard Tessellation Language</li>
+				<li>I'm not sure why STL format is a defacto standard.</li>
+			</ul>
+		</div>
+		<object data="mp3/club.mp3" archive="volume:50,loop" type="audio/mp3" class="handout" declare="declare" width="0" height="0"></object>
+	</div>
+	
+	<div class="slide">
+    	<h1>GCode Files are Unique (typically)</h1>
+		<ul>
+        	<li>Gcode is generated for a specific 3D Printer.
+            	<ul>
+                	<li>3D printer models can vary significantly.</li>
+                    <li>Mechanics, electronics, firmware.</li>
+                    <li>Speed, cooling.</li>
+				</ul>
+			</li>
+        	<li>GCode is generated for a specific material being printed.
+            	<ul>
+                	<li>Temperature differences.</li>
+                    <li>Other variations.</li>
+				</ul>
+			</li>
+        	<li>GCode is generated for a specific object (STL) being printed.
+            	<ul>
+                	<li>Layer height, infill, solid layers.</li>
+                	<li>Support material.</li>
+                    <li>Speed, cooling.</li>
+				</ul>
+			</li>
+		</ul>
+		<div class="notes">
+			<ul>
+            	<li>We are talking about GCode for 3D Printers, not CNC.</li>
+                <li>GCode standards for 3D printers are a nightmare.  This jury still deliberating on CNC GCode.</li>
+			</ul>
+		</div>
+		<object data="mp3/easy.mp3" archive="volume:50,loop" type="audio/mp3" class="handout" declare="declare" width="0" height="0"></object>
+	</div>
+	
+	<div class="slide">
+    	<h1>GCode File Naming Conventions</h1>
+		<ul>
+        	<li>GCode is unique to printer/material/object.</li>
+            <li>It is easy to accumulate heaps of GCode files.</li>
+            <li>Name GCode files verbosely.<ul><li>Use a naming convention like: [object-name]_[3D-printer-model-name]_[material-name]_[material-diameter]_[nozzle-size].gcode</li></ul></li>
+            <li>Or use folders and subfolders.</li>
+            <li>If you only intend to print on one (1) machine ever, then skip the model name and nozzle size.</li>
+            <li>Properly verbose file names.</li>
+		</ul>
+		<div class="notes">
+			<ul>
+            	<li>The naming convetion sounds too verbose.  It will help you later.</li>
+			</ul>
+		</div>
+		<object data="mp3/smart.mp3" archive="volume:50,loop" type="audio/mp3" class="handout" declare="declare" width="0" height="0"></object>
+	</div>
+	
+	<div class="slide">
+    	<h1>Slic3r Intro</h1>
+		<ul>
+			<li>Download from <a href="http://slic3r.org" rel="external">slic3r.org</a></li>
+			<li>Slic3r is open source.  Code is at <a href="https://github.com/alexrj/Slic3r" rel="external">github.com/alexrj/Slic3r</a></li>
+            <li>Download latest stable version.  Find a version that works for you.</li>
+            <li>Update if you need new features or something does not work.</li>
+		</ul>
+		<div class="notes">
+			<ul>
+            	<li>Slic3r is written in PERL.  PERL should be dead by now, but new projects like Slic3r arise.  Then there is PERL 6 vs. PERL 5.</li>
+				<li>Slic3r doesn't have much automated testing.</li>
+			</ul>
+		</div>
+		<object data="mp3/electro.mp3" archive="volume:50,loop" type="audio/mp3" class="handout" declare="declare" width="0" height="0"></object>
+	</div>
+	
+	<div class="slide">
+		<h1>Slic3r Settings</h1>
+		<ul>
+			<li>Focused on 3 unique aspects of GCode.</li>
+			<li>Print Settings (object, or STL)</li>
+			<li>Printer Settings (machine)</li>
+            <li>Filament Settings (material)</li>
+		</ul>
+	</div>
+
+	<div class="slide">
+		<h1>Slic3r Plater</h1>
+		<ul>
+        	<li>Plate TAB in Slic3r.</li>
+            <li>Grid shows envelope size, center offset.</li>
+        	<li>Click/drag an STL file onto the Plater.</li>
+			<li>Use More(+)/Less(-) for more/fewer instances of the STL file.
+            	<ul>
+                	<li>All instances treated the same for rotate, scale.</li>
+                </ul>
+            </li>
+        	<li>Click/drag more STL files onto the Plater if there is room.</li>
+        	<li>Arrange objects on plater.</li>
+        	<li>If you need multiple copies of the same file at different scale/rotation, then click/drag more copies of the same file onto the plater.</li>
+		</ul>
+	</div>
+
+	<div class="slide">
+		<h1>Slic3r Settings Intro</h1>
+		<ul>
+			<li>Focused on the 3 Slic3r TABS = 3 unique characteristics of GCode.</li>
+			<li>Print Settings (object, or STL)</li>
+			<li>Printer (Settings) (machine)</li>
+            <li>Filament (Settings) (material)</li>
+            <li>Hover on text field for tooltip help.</li>
+		</ul>
+	</div>
+
+	<div class="slide">
+		<h1>Slic3r Configs and Presets</h1>
+		<ul>
+			<li>Create/Edit/Delete shortcuts for settings for each TAB.</li>
+            <li>TAB presets can be confusing.</li>
+            <li>Export Config to save ALL preset settings.  Not confusing.</li>
+            <li>Load Config of ALL saved preset settings.</li>
+            <li>Config files are human-readable INI text files.</li>
+            <li>TAB presets show name of loaded Config file.</li>
+            <li>SSD Github repo has Config INIs for SSD 3D Printers.</li>
+		</ul>
+	</div>
+
+	<div class="slide">
+		<h1>Slic3r Print Settings</h1>
+		<ul>
+			<li>For the object we want to print.</li>
+            <li>Layer height; solid layers on top/bottom.</li>
+            <li>Skirt; brim</li>
+            <li>Hollow, Solid, Partially Solid</li>
+            <li>Infill</li>
+            <li>Speed</li>
+            <li>Support Material</li>
+            <li>Much more</li>
+		</ul>
+
+		<div class="notes">
+			<ul>
+            	<li>Define and discuss overhangs.</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="slide">
+		<h1>Slic3r Filament (Settings)</h1>
+		<ul>
+			<li>For the filament (material) we are printing with.</li>
+            <li>Filament Diameter</li>
+            <li>Cooling</li>
+		</ul>
+	</div>
+
+	<div class="slide">
+		<h1>Slic3r Printer (Settings)</h1>
+		<ul>
+			<li>For the 3D printer (machine) doing the fabrication.</li>
+            <li>Bed Size</li>
+            <li>Center</li>
+            <li>Retraction</li>
+            <li>Multiple Extruders</li>
+		</ul>
+	</div>
+
+	<div class="slide">
+		<h1>Vieweing GCode</h1>
+		<ul>
+        	<li>Print3r for Android has OpenGL viewers for web and Android.</li>
+            <li>Most control software has a method to view GCode.</li>
+			<li>We use a web-based 2-D GCode viewer at <a href="http://gcode.ws" rel="external">http://gcode.ws</a>
+            	<ul>
+		            <li>Shows complete tool paths of 3D printer, layer by layer.</li>
+        		    <li>Legend on left side</li>
+		            <li>Infinite grid</li>
+            		<li>Scroll bar on right side &raquo; layers</li>
+     		       <li>Scroll bar on bottom &raquo; layer motion</li>
+               </ul>
+            </li>
+		</ul>
+	</div>
+
+	<div class="slide">
+		<h1>Let's <strong>Slice some STLs</strong>!</h1>
+		<ul>
+        	<li>GCode Viewer</li>
+        	<li>A few STL files; many slicing options.</li>
+            <li>Verbose File Names</li>
+		</ul>
+	</div>
+
+	<div class="slide">
+		<h1>Other Slicing Software</h1>
+		<ul>
+			<li>Skeinforge - <abbr title="Open Source Software">OSS</abbr>, ?</li>
+            <li>KISSlicer - commercial, Java</li>
+		</ul>
+	
+		<object data="mp3/mini1.mp3" archive="volume:50,loop" type="audio/mp3" class="handout" declare="declare" width="0" height="0"></object>
+	</div>
+	
+	<div class="slide">
+		<h1>Conclusion</h1>
+		<ul>
+        	<li>Thank you for your support!</li>
+			<li>Workshop Donations Accepted</li>
+            <li>Join Solid State Depot!</li>
+            <li>Boulder Hackerspace (SSD) Google Group at <a href="https://groups.google.com/forum/#!forum/boulder-hackerspace-public" rel="external">https://groups.google.com/forum/#!forum/boulder-hackerspace-public</a>
+			<li>If you want to contact me use: <span class="tw">free@terawattindustries.com</span><br /> 
+			<br />alternatively: <a href="https://store.terawattindustries.com/contact-us" rel="external">Terawatt Industries website</a></li>
+		</ul>
+	
+		<object data="mp3/mini2.mp3" archive="volume:50,loop" type="audio/mp3" class="handout" declare="declare" width="0" height="0"></object>
+	</div>
+
+</div>
+</body>
+</html>
