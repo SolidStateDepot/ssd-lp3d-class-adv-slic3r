@@ -4,6 +4,9 @@ This is a workshop we hold at Solid State Depot.  It covers the file conversion 
 
 This is an S5 presentation.  There is a printer-friendly version.
 
+## Use It
+This repository is a 'Github Pages' website.  Access the full presentation at http://solidstatedepot.github.io/ssd-lp3d-class-adv-slic3r.  You can also download or clone the repository.  Load index.html in your browser frmo your copy.  You don't need a web server, you can just load it with a traditional double-click.
+
 ## Demo Parts and GCode
 There are a growing number of parts that provide samples of how different parameters change the GCode output.  They are zipped in lets_slice/lets_slice.zip.  Extract this file to use them.  The GCode files are in lets_slice/gcode (unzipped).  Actually, there are subfolders that contain the GCode - the names of these folders correspond to the version of GCode that generated the file.  Each subfolder should have an Open Office Spreadsheet (.ODS file) with a legend for _each_ GCode file.
 
